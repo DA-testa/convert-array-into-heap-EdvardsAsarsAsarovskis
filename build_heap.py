@@ -1,42 +1,75 @@
-# python3
 
+# python3
+# Edvards Asars Asarovskis 221RDB328
+
+
+
+def swap(data, swaps, child, parent):
+    swaps.append((parent, child))
+    data[child], data[parent] = data[parent], data[child]
+
+def HeapUp(data, swaps, m):
+    parent = (m-1)//2
+    if m == 0:
+        return
+    if data[m] < data[parent]:
+        swap(data, swaps, m, parent)
+        HeapUp(data, swaps, parent)
 
 def build_heap(data):
+    n = len(data)
     swaps = []
-    # TODO: Creat heap and heap sort
-    # try to achieve  O(n) and not O(n2)
 
+    if n == 0:
+        swaps.append(0)
+        return swaps
+
+    for i in range(n-1, -1, -1):
+        HeapUp(data, swaps, i)
 
     return swaps
 
 
 def main():
-    
-    # TODO : add input and corresponding checks
-    # add another input for I or F 
-    # first two tests are from keyboard, third test is from a file
+    input_text = input()
 
+    if input_text.startswith('F'):
+        input_file = input().strip()
+        input_file = f"tests/{input_file}"
 
-    # input from keyboard
-    n = int(input())
-    data = list(map(int, input().split()))
+        if 'a' not in input_file:
+            try:
+                with open(input_file, "r") as f:
+                    length = int(f.readline())
+                    data = list(map(int, f.readline().split()))
 
-    # checks if lenght of data is the same as the said lenght
-    assert len(data) == n
+                    assert len(data) == length
 
-    # calls function to assess the data 
-    # and give back all swaps
-    swaps = build_heap(data)
+                    swaps = build_heap(data)
 
-    # TODO: output how many swaps were made, 
-    # this number should be less than 4n (less than 4*len(data))
+                    assert len(swaps) < 4*length
 
+                    print(len(swaps))
+                    for i, j in swaps:
+                        print(i, j)
 
-    # output all swaps
-    print(len(swaps))
-    for i, j in swaps:
-        print(i, j)
+            except FileNotFoundError:
+                print("File_not_found_error")
+                return
 
+    elif input_text.startswith('I'):
+        length = int(input())
+        data = list(map(int, input().split()))
+
+        assert len(data) == length
+
+        swaps = build_heap(data)
+
+        assert len(swaps) < 4*length
+
+        print(len(swaps))
+        for i, j in swaps:
+            print(i, j)
 
 if __name__ == "__main__":
     main()
